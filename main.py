@@ -1,4 +1,5 @@
 from PyQt6 import QtCore
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QMainWindow, QApplication
 
 import sys
@@ -30,24 +31,36 @@ class Calculator (QMainWindow, Ui_MainWindow):
 		# Привязка функции к кнопке сброса
 		self.cButton.pressed.connect(self.c_func)
 
+		self.plusButton.pressed.connect(self.plus_func)
+
+		self.equalsButton.pressed.connect(self.equals_func)
+
 	def c_func(self):
 		self.num1 = None
 		self.num2 = None
 		self.operation = None
-		self.lineEdit.setText("")
+		self.textEdit.setText("")
 
 	def num_func(self):
 		number = self.sender().text()
 		if self.numberBool:
 			self.num2+=number
-			self.lineEdit.setText(f"{self.num2}")
+			self.textEdit.insertPlainText(number)
 		else:
 			self.num1+=number
-			self.lineEdit.setText(f"{self.num1}")
+			self.textEdit.insertPlainText(number)
 
 	def change_num(self):
-		self.numberBool = True
-		self.lineEdit.setText("")
+		self.numberBool = not self.numberBool
+
+	def plus_func(self):
+		self.change_num()
+		self.textEdit.insertPlainText(" + ")
+		self.operation = "Plus"
+
+	def equals_func(self):
+		self.textEdit.insertPlainText("\n = ")
+		print(self.num1, self.num2, self.operation)
 
 
 app = QApplication(sys.argv)
